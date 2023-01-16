@@ -62,7 +62,10 @@ def draw_list(draw_info, color_positions = {} , clear_bg = False):
 
 
      if clear_bg:
-          clear_rect = (draw_info.SIDE_PAD//2 , draw_info.TOP_PAD, )
+          clear_rect = (draw_info.SIDE_PAD//2 , draw_info.TOP_PAD,
+                         draw_info.width - draw_info.SIDE_PAD ,
+                        draw_info.height - draw_info.TOP_PAD )
+          pygame.draw.rect(draw_info.window,draw_info.BACKGROUND_COLOR, clear_rect)
 
      for i , val in enumerate(lst):
           x = draw_info.start_x + i  * draw_info.block_width
@@ -73,6 +76,9 @@ def draw_list(draw_info, color_positions = {} , clear_bg = False):
           if color_positions:
                color = color_positions[i]
           pygame.draw.rect(draw_info.window , color, (x,y ,draw_info.block_width, draw_info.height))
+
+          if clear_bg:
+               pygame.display.update()
 
 
 ## making the list be random while generatuing the list
@@ -94,7 +100,7 @@ def bubbleSort (draw_info, ascending = True ):
 
                if (num1 > num2 and ascending) or (num1 < num2 and not asceending):
                     lst[j], lst[j +1] = lst[j + 1] , lst[j]
-                    # draw_list
+                    draw_list(draw_info, {j: draw_info.GREEN , j+1: draw_info.RED})
                     yield True
 
      return lst
@@ -116,6 +122,14 @@ def main():
 
      sorting = False
      ascending = True
+
+     sorting_algorithm = bubbleSort
+
+     sorting_algo_name = "Bubble Sort"
+
+     sorting_algo_generator = None
+
+
 
      while run:
           clock.tick(60)
